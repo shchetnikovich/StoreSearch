@@ -12,6 +12,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.contentInset = UIEdgeInsets(top: 51, left: 0, bottom:
+        0, right: 0)    // 51 - исходя из высоты SearchBar'a
     }
     
     
@@ -22,6 +24,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
         searchResults = []
         for i in 0...2 {
             searchResults.append(
@@ -29,6 +32,10 @@ extension SearchViewController: UISearchBarDelegate {
             )
         }
         tableView.reloadData()
+    }
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+      return .topAttached   //  Прижимаем SearchBar к StatusBar Area
     }
 }
 
