@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+class SearchResult {        //      Создаём новый класс для хранения данных
+    
+  var name = ""
+  var artistName = ""
+    
+}
