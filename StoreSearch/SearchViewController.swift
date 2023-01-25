@@ -11,6 +11,9 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 51, left: 0, bottom: 0, right: 0)    //  51 - исходя из высоты SearchBar'a
+        
+        let cellNib = UINib(nibName: "SearchResultCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "SearchResultCell")     //  Регистрируем .nib файл
     }
 }
 
@@ -84,7 +87,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(     //  Гарантирует возможность выбора строки, при наличии резуьтатов поиска.
+    func tableView(     //  Гарантирует возможность выбора строки, при наличии результатов поиска.
         _ tableView: UITableView,
         willSelectRowAt indexPath: IndexPath
     ) -> IndexPath? {

@@ -24,7 +24,7 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="HAZ-5b-hnT"/>
                                 </connections>
                             </tableView>
-                            <searchBar contentMode="redraw" placeholder="Search..." translatesAutoresizingMaskIntoConstraints="NO" id="QHp-fG-B03">
+                            <searchBar contentMode="redraw" placeholder="Поиск..." translatesAutoresizingMaskIntoConstraints="NO" id="QHp-fG-B03">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
