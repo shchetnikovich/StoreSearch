@@ -20,14 +20,16 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset = UIEdgeInsets(top: 47, left: 0, bottom: 0, right: 0)
-        var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)
+        tableView.contentInset = UIEdgeInsets(top: 51, left: 0, bottom: 0, right: 0) // 51 исходя из высоты SearchBar'a
+        
+        
+        var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)   //  Регистрируем .nib файлы
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.searchResultCell)
         cellNib = UINib(nibName: TableView.CellIdentifiers.nothingFoundCell, bundle: nil)
         tableView.register(
             cellNib,
             forCellReuseIdentifier: TableView.CellIdentifiers.nothingFoundCell)
-        searchBar.becomeFirstResponder()
+        searchBar.becomeFirstResponder()    //  Show keyboard on app launch
     }
 }
 
