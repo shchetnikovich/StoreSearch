@@ -7,6 +7,8 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var searchBar2: UISearchBar!
+    
     var searchResults = [SearchResult]()
     var hasSearched = false         //  Handle no results when app starts
     
