@@ -7,8 +7,6 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var searchBar2: UISearchBar!
-    
     var searchResults = [SearchResult]()
     var hasSearched = false         //  Handle no results when app starts
     
@@ -41,19 +39,17 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        searchResults = []
-        
-        if searchBar.text! != "Hello Kitty" {
-            for i in 0...2 {
-                let searchResult = SearchResult()
-                searchResult.name = String(format: "Row %d", i)
-                searchResult.artistName = searchBar.text!
-                searchResults.append(searchResult)
+        if !searchBar.text!.isEmpty {
+            searchBar.resignFirstResponder()
+            hasSearched = true
+            searchResults = []
+            let url = iTunesURL(searchText: searchBar.text!)
+            print("URL: '\(url)'")
+            if let jsonString = performStoreRequest(with: url) {        //  Возвращаем нужные нам JSON данные
+                print("Received JSON string '\(jsonString)'")
             }
+            tableView.reloadData()
         }
-        hasSearched = true
-        tableView.reloadData()
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {    //   Прижимаем SearchBar к StatusBar Area
@@ -116,4 +112,28 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return indexPath
         }
     }
+    
+    // MARK: - Helper Methods
+    
+    func iTunesURL(searchText: String) -> URL {
+        let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!    //  Декодируем наш запрос с String в валидный URL для поиска в UTF-8
+        
+        let urlString = String(
+            format: "https://itunes.apple.com/search?term=%@",
+            encodedText)
+        
+        let url = URL(string: urlString)
+        return url!
+    }
+    
+    func performStoreRequest(with url: URL) -> String? {        //!!!: - should not occur on this application's main thread as it may lead to UI unresponsiveness. Please switch to an asynchronous networking API such as URLSession.
+        do {
+            return try String(contentsOf: url, encoding: .utf8)
+        } catch {
+            print("Download Error: \(error.localizedDescription)")
+            return nil
+        }
+    }
 }
+
+
