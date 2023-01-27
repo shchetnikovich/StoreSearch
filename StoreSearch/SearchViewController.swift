@@ -10,11 +10,14 @@ class SearchViewController: UIViewController {
     var searchResults = [SearchResult]()
     var hasSearched = false         //  Handle no results when app starts
     
+    var isLoading = false
+    
     
     struct TableView {
         struct CellIdentifiers {
             static let searchResultCell = "SearchResultCell"
             static let nothingFoundCell = "NothingFoundCell"
+            static let loadingCell = "LoadingCell"
         }
     }
     
@@ -26,10 +29,11 @@ class SearchViewController: UIViewController {
         var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)   //  Регистрируем .nib файлы
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.searchResultCell)
         cellNib = UINib(nibName: TableView.CellIdentifiers.nothingFoundCell, bundle: nil)
-        tableView.register(
-            cellNib,
-            forCellReuseIdentifier: TableView.CellIdentifiers.nothingFoundCell)
+        tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.nothingFoundCell)
         searchBar.becomeFirstResponder()    //  Show keyboard on app launch
+        
+        cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
     }
 }
 
@@ -41,6 +45,8 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
+            isLoading = true
+            tableView.reloadData()
             hasSearched = true
             searchResults = []
             let url = iTunesURL(searchText: searchBar.text!)
@@ -49,6 +55,7 @@ extension SearchViewController: UISearchBarDelegate {
                 searchResults = parse(data: data)
                 searchResults.sort { $0 < $1 } //  Сортировка closure returns true only if $0.name comes before $1.name. Метод < в SearchResult
             }
+            isLoading = false
             tableView.reloadData()
         }
     }
@@ -66,7 +73,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        if !hasSearched {
+        if isLoading {
+            return 1
+        } else if !hasSearched {
             return 0
         } else if searchResults.count == 0 {
             return 1
@@ -79,7 +88,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        if searchResults.count == 0 {
+        
+        if isLoading {
+            let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.loadingCell, for: indexPath)
+            let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
+            spinner.startAnimating()
+            return cell
+        } else if searchResults.count == 0 {
             return tableView.dequeueReusableCell(
                 withIdentifier: TableView.CellIdentifiers.nothingFoundCell,
                 for: indexPath)
@@ -114,7 +129,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         _ tableView: UITableView,
         willSelectRowAt indexPath: IndexPath
     ) -> IndexPath? {
-        if searchResults.count == 0 {
+        if searchResults.count == 0 || isLoading {
             return nil
         } else {
             return indexPath
@@ -127,7 +142,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!    //  Декодируем наш запрос с String в валидный URL для поиска в UTF-8
         
         let urlString = String(
-            format: "https://itunes.apple.com/search?term=%@",
+            format: "https://itunes.apple.com/search?term=%@limit=50",
             encodedText)
         
         let url = URL(string: urlString)

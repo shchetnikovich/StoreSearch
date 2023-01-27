@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A908BD5129841AC2002E824E /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A908BD5029841AC2002E824E /* LoadingCell.xib */; };
 		A960E021298058B500F8962B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A960E020298058B500F8962B /* AppDelegate.swift */; };
 		A960E023298058B500F8962B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A960E022298058B500F8962B /* SceneDelegate.swift */; };
 		A960E025298058B500F8962B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A960E024298058B500F8962B /* SearchViewController.swift */; };
@@ -15,11 +16,12 @@
 		A960E02D298058B600F8962B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A960E02B298058B600F8962B /* LaunchScreen.storyboard */; };
 		A9AE567E298189A000C6C6F7 /* SearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9AE567D298189A000C6C6F7 /* SearchResultCell.xib */; };
 		A9AE5682298190E200C6C6F7 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE5681298190E200C6C6F7 /* SearchResultCell.swift */; };
-		A9AE56842981A83A00C6C6F7 /* NothingFound.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9AE56832981A83A00C6C6F7 /* NothingFound.xib */; };
+		A9AE56842981A83A00C6C6F7 /* NothingFoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9AE56832981A83A00C6C6F7 /* NothingFoundCell.xib */; };
 		A9CC09ED29817CD90011B5D6 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CC09EC29817CD90011B5D6 /* SearchResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A908BD5029841AC2002E824E /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		A960E01D298058B500F8962B /* StoreSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoreSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A960E020298058B500F8962B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A960E022298058B500F8962B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,7 +32,7 @@
 		A960E02E298058B600F8962B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9AE567D298189A000C6C6F7 /* SearchResultCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultCell.xib; sourceTree = "<group>"; };
 		A9AE5681298190E200C6C6F7 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
-		A9AE56832981A83A00C6C6F7 /* NothingFound.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFound.xib; sourceTree = "<group>"; };
+		A9AE56832981A83A00C6C6F7 /* NothingFoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFoundCell.xib; sourceTree = "<group>"; };
 		A9CC09EC29817CD90011B5D6 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,7 +76,8 @@
 				A9CC09EC29817CD90011B5D6 /* SearchResult.swift */,
 				A9AE567D298189A000C6C6F7 /* SearchResultCell.xib */,
 				A9AE5681298190E200C6C6F7 /* SearchResultCell.swift */,
-				A9AE56832981A83A00C6C6F7 /* NothingFound.xib */,
+				A9AE56832981A83A00C6C6F7 /* NothingFoundCell.xib */,
+				A908BD5029841AC2002E824E /* LoadingCell.xib */,
 			);
 			path = StoreSearch;
 			sourceTree = "<group>";
@@ -138,7 +141,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A960E02D298058B600F8962B /* LaunchScreen.storyboard in Resources */,
-				A9AE56842981A83A00C6C6F7 /* NothingFound.xib in Resources */,
+				A9AE56842981A83A00C6C6F7 /* NothingFoundCell.xib in Resources */,
+				A908BD5129841AC2002E824E /* LoadingCell.xib in Resources */,
 				A960E02A298058B600F8962B /* Assets.xcassets in Resources */,
 				A9AE567E298189A000C6C6F7 /* SearchResultCell.xib in Resources */,
 				A960E028298058B500F8962B /* Main.storyboard in Resources */,
