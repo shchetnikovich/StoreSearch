@@ -45,8 +45,9 @@ extension SearchViewController: UISearchBarDelegate {
             searchResults = []
             let url = iTunesURL(searchText: searchBar.text!)
             print("URL: '\(url)'")
-            if let jsonString = performStoreRequest(with: url) {        //  Возвращаем нужные нам JSON данные
-                print("Received JSON string '\(jsonString)'")
+            if let data = performStoreRequest(with: url) {        //  Возвращаем нужные нам JSON данные - Словарь(resultsCount=50) - внутри Массив - внутри массива Словари (type:, artist:, trackName:)
+                let results = parse(data: data)
+                print("Result: \(results)")
             }
             tableView.reloadData()
         }
@@ -126,14 +127,25 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         return url!
     }
     
-    func performStoreRequest(with url: URL) -> String? {        //!!!: - should not occur on this application's main thread as it may lead to UI unresponsiveness. Please switch to an asynchronous networking API such as URLSession.
+    func performStoreRequest(with url: URL) -> Data? {
         do {
-            return try String(contentsOf: url, encoding: .utf8)
+            return try Data(contentsOf: url) //!!!: - Synchronous URL
         } catch {
             print("Download Error: \(error.localizedDescription)")
             return nil
         }
     }
+    
+    func parse(data: Data) -> [SearchResult] {      //  use a JSONDecoder object to convert the response data from the server to a temporary ResultArray object
+        do {
+            let decoder = JSONDecoder()
+            let result = try decoder.decode(
+                ResultArray.self, from: data)
+            return result.results
+        } catch {
+            print("JSON Error: \(error)")
+            return []
+        }
+    }
+    
 }
-
-
