@@ -15,7 +15,7 @@ class SearchResult: Codable, CustomStringConvertible {        //      Созда
     }
     
     var description: String {   //  description p to conform to the CustomStringConvertible
-      return "\nРезультат - Песня: \(name), Исполнитель: \(artistName ?? "Пусто")"
+      return "\nРезультат - Песня: \(name), Исполнитель: \(artistName ?? "Неизвестно")"
         
     }
     

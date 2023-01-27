@@ -132,6 +132,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return try Data(contentsOf: url) //!!!: - Synchronous URL
         } catch {
             print("Download Error: \(error.localizedDescription)")
+            showNetworkError()
             return nil
         }
     }
@@ -148,4 +149,15 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func showNetworkError() {       //  Error handling
+        let alert = UIAlertController(
+            title: "Ошибка",
+            message: "Неудалось получить доступ к сервисам iTunes Store." +
+            " Попробуйте позже.",
+            preferredStyle: .alert)
+        let action = UIAlertAction(
+            title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
 }
