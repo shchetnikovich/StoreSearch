@@ -46,8 +46,7 @@ extension SearchViewController: UISearchBarDelegate {
             let url = iTunesURL(searchText: searchBar.text!)
             print("URL: '\(url)'")
             if let data = performStoreRequest(with: url) {        //  Возвращаем нужные нам JSON данные - Словарь(resultsCount=50) - внутри Массив - внутри массива Словари (type:, artist:, trackName:)
-                let results = parse(data: data)
-                print("Result: \(results)")
+                searchResults = parse(data: data)
             }
             tableView.reloadData()
         }
@@ -89,7 +88,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
                 for: indexPath) as! SearchResultCell
             let searchResult = searchResults[indexPath.row]
             cell.nameLabel.text = searchResult.name
-            cell.artistNameLabel.text = searchResult.artistName
+            if searchResult.artist.isEmpty {
+                cell.artistNameLabel.text = "Неизвестно"
+            } else {
+                cell.artistNameLabel.text = String(
+                    format: "%@ (%@)",
+                    searchResult.artist,
+                    searchResult.type)
+            }
             return cell
         }
     }
@@ -155,6 +161,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             message: "Неудалось получить доступ к сервисам iTunes Store." +
             " Попробуйте позже.",
             preferredStyle: .alert)
+        
         let action = UIAlertAction(
             title: "OK", style: .default, handler: nil)
         alert.addAction(action)
