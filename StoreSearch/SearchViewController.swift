@@ -12,6 +12,8 @@ class SearchViewController: UIViewController {
     
     var isLoading = false
     
+    var dataTask: URLSessionDataTask?       //  Для cancel()
+    
     
     struct TableView {
         struct CellIdentifiers {
@@ -45,14 +47,17 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
+            
+            dataTask?.cancel()      //  Making sure that no old searches can ever get in the way of the new search
             isLoading = true
             tableView.reloadData()
+            
             hasSearched = true
             searchResults = []
             
             let url = iTunesURL(searchText: searchBar.text!)
             let session = URLSession.shared     //  Default configuration
-            let dataTask = session.dataTask(with: url) {data, response,
+            dataTask = session.dataTask(with: url) {data, response,
                 error in
                 if let error = error {
                     print("Failure! \(error.localizedDescription)")
@@ -69,14 +74,14 @@ extension SearchViewController: UISearchBarDelegate {
                 } else {
                     print("Failure! \(response!)")
                 }
-                DispatchQueue.main.async {
+                DispatchQueue.main.async {      //  UI перерисовку делать только в MAIN THREAD
                     self.hasSearched = false
                     self.isLoading = false
                     self.tableView.reloadData()
                     self.showNetworkError()
                 }
             }
-            dataTask.resume()   //  Sends the request to the server on a background thread
+            dataTask?.resume()   //  Sends the request to the server on a background thread
         }
     }
     
