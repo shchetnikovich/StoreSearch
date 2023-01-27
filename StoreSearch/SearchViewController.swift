@@ -49,14 +49,21 @@ extension SearchViewController: UISearchBarDelegate {
             tableView.reloadData()
             hasSearched = true
             searchResults = []
-            let url = iTunesURL(searchText: searchBar.text!)
-            print("URL: '\(url)'")
-            if let data = performStoreRequest(with: url) {        //  Возвращаем нужные нам JSON данные - Словарь(resultsCount=50) - внутри Массив - внутри массива Словари (type:, artist:, trackName:)
-                searchResults = parse(data: data)
-                searchResults.sort { $0 < $1 } //  Сортировка closure returns true only if $0.name comes before $1.name. Метод < в SearchResult
+            
+            let queue = DispatchQueue.global()
+            let url = self.iTunesURL(searchText: searchBar.text!)
+            
+            queue.async {
+                if let data = self.performStoreRequest(with: url) {
+                    self.searchResults = self.parse(data: data)
+                    self.searchResults.sort(by: <)
+                    DispatchQueue.main.async {      // Важно! Изменения в UI ВСЕГДА! делать в Main Thread!!!
+                        self.isLoading = false
+                        self.tableView.reloadData()
+                    }
+                    return
+                }
             }
-            isLoading = false
-            tableView.reloadData()
         }
     }
     
