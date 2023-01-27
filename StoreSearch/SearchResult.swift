@@ -88,6 +88,11 @@ class SearchResult: Codable, CustomStringConvertible {        //      Созда
       }
       return "Неизвестно"
     }
-    
+}
 
+//MARK: - Helper Methods
+
+func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
+    return lhs.name.localizedStandardCompare(rhs.name)
+    == .orderedAscending
 }

@@ -47,7 +47,7 @@ extension SearchViewController: UISearchBarDelegate {
             print("URL: '\(url)'")
             if let data = performStoreRequest(with: url) {        //  Возвращаем нужные нам JSON данные - Словарь(resultsCount=50) - внутри Массив - внутри массива Словари (type:, artist:, trackName:)
                 searchResults = parse(data: data)
-                searchResults.sort { $0.name.localizedStandardCompare($1.name) == .orderedAscending } //  Сортировка closure returns true only if $0.name comes before $1.name
+                searchResults.sort { $0 < $1 } //  Сортировка closure returns true only if $0.name comes before $1.name. Метод < в SearchResult
             }
             tableView.reloadData()
         }
