@@ -50,20 +50,27 @@ extension SearchViewController: UISearchBarDelegate {
             hasSearched = true
             searchResults = []
             
-            let queue = DispatchQueue.global()
-            let url = self.iTunesURL(searchText: searchBar.text!)
-            
-            queue.async {
-                if let data = self.performStoreRequest(with: url) {
-                    self.searchResults = self.parse(data: data)
-                    self.searchResults.sort(by: <)
-                    DispatchQueue.main.async {      // Важно! Изменения в UI ВСЕГДА! делать в Main Thread!!!
-                        self.isLoading = false
-                        self.tableView.reloadData()
+            let url = iTunesURL(searchText: searchBar.text!)
+            let session = URLSession.shared     //  Default configuration
+            let dataTask = session.dataTask(with: url) {data, response,
+                error in
+                if let error = error {
+                    print("Failure! \(error.localizedDescription)")
+                } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                    if let data = data {
+                        self.searchResults = self.parse(data: data)
+                        self.searchResults.sort(by: <)
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                        }
+                        return
                     }
-                    return
+                } else {
+                    print("Failure! \(response!)")
                 }
             }
+            dataTask.resume()   //  Sends the request to the server on a background thread
         }
     }
     
@@ -149,22 +156,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!    //  Декодируем наш запрос с String в валидный URL для поиска в UTF-8
         
         let urlString = String(
-            format: "https://itunes.apple.com/search?term=%@limit=50",
+            format: "https://itunes.apple.com/search?term=%@",
             encodedText)
         
         let url = URL(string: urlString)
         return url!
     }
     
-    func performStoreRequest(with url: URL) -> Data? {
-        do {
-            return try Data(contentsOf: url) //!!!: - Synchronous URL
-        } catch {
-            print("Download Error: \(error.localizedDescription)")
-            showNetworkError()
-            return nil
-        }
-    }
+
     
     func parse(data: Data) -> [SearchResult] {      //  use a JSONDecoder object to convert the response data from the server to a temporary ResultArray object
         do {
