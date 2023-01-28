@@ -14,8 +14,9 @@ class DetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        popupView.layer.cornerRadius = 10
 
-        // Do any additional setup after loading the view.
     }
     
 
