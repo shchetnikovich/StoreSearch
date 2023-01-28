@@ -1,15 +1,10 @@
 import UIKit
 
-
-
 class SearchViewController: UIViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    
-    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    
     
     var searchResults = [SearchResult]()
     var hasSearched = false         //  Handle no results when app starts
@@ -41,15 +36,20 @@ class SearchViewController: UIViewController {
         cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender:     //  Подключаем modal presentation style (.pageSheet можно свайпать)
+                          Any?) {
+        if segue.identifier == "ShowDetail" {
+            segue.destination.modalPresentationStyle = .pageSheet
+        }
+    }
 
 //MARK: - Actions
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         performSearch()
     }
-    
 }
-
 
 // MARK: - Search Bar Delegate
 
@@ -150,11 +150,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     //MARK: - Selection Handling
     
-    func tableView(     //  Отменяет выделение с анимацией
+    func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)    //  Отменяет выделение с анимацией
+        performSegue(withIdentifier: "ShowDetail", sender: indexPath)   //  Переходим в Detail Scene
     }
     
     func tableView(     //  Гарантирует возможность выбора строки, при наличии результатов поиска.
