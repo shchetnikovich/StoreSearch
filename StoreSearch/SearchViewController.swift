@@ -37,12 +37,20 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender:     //  Подключаем modal presentation style (.pageSheet можно свайпать)
+// MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender:
                           Any?) {
         if segue.identifier == "ShowDetail" {
-            segue.destination.modalPresentationStyle = .pageSheet
+            let detailViewController = segue.destination as! DetailViewController       //  Передаем объект в DetailViewController по IndexPath
+            let indexPath = sender as! IndexPath
+            let searchResult = searchResults[indexPath.row]
+            detailViewController.searchResult = searchResult
+            segue.destination.modalPresentationStyle = .pageSheet   //  Подключаем modal presentation style (.pageSheet можно свайпать)
         }
     }
+    
+    
 
 //MARK: - Actions
     
