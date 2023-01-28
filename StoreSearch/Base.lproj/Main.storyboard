@@ -33,27 +33,50 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="RPm-3P-KOw"/>
                                 </connections>
                             </searchBar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Dlp-Ee-p82">
+                                <rect key="frame" x="0.0" y="56" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <items>
+                                    <barButtonItem style="plain" id="UVJ-ji-sdb">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="bar" selectedSegmentIndex="0" id="trx-P8-hXT">
+                                            <rect key="frame" x="16" y="6" width="343" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="Все"/>
+                                                <segment title="Музыка"/>
+                                                <segment title="Программы"/>
+                                                <segment title="Книги"/>
+                                            </segments>
+                                            <connections>
+                                                <action selector="segmentChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="0gU-Xa-4YL"/>
+                                            </connections>
+                                        </segmentedControl>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="1PF-s1-byz"/>
-                            <constraint firstItem="QHp-fG-B03" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1aR-41-jgt"/>
-                            <constraint firstItem="QHp-fG-B03" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="EPR-db-K2g"/>
-                            <constraint firstItem="QHp-fG-B03" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Qqj-XM-z5s"/>
-                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="S6U-X0-Exb"/>
-                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="afD-Iw-5Wg"/>
-                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="kEA-mt-Ugh"/>
+                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="0jv-4s-4aH"/>
+                            <constraint firstItem="QHp-fG-B03" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="330-xf-PGv"/>
+                            <constraint firstItem="QHp-fG-B03" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="III-WS-XPR"/>
+                            <constraint firstItem="Dlp-Ee-p82" firstAttribute="top" secondItem="QHp-fG-B03" secondAttribute="bottom" id="OVi-DX-snT"/>
+                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="VsK-xr-3rm"/>
+                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="gCE-7W-bes"/>
+                            <constraint firstItem="J5g-uG-Ouu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="l8E-dq-RqX"/>
+                            <constraint firstItem="QHp-fG-B03" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="rwu-vL-OT2"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="searchBar" destination="QHp-fG-B03" id="xOW-OA-YJv"/>
+                        <outlet property="segmentedControl" destination="trx-P8-hXT" id="yg2-bL-hoO"/>
                         <outlet property="tableView" destination="J5g-uG-Ouu" id="XKL-A7-Y2b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="48" y="-2"/>
+            <point key="canvasLocation" x="46.046511627906973" y="-2.5751072961373391"/>
         </scene>
     </scenes>
     <resources>

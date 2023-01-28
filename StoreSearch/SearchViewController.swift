@@ -7,6 +7,10 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
+    
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    
     var searchResults = [SearchResult]()
     var hasSearched = false         //  Handle no results when app starts
     
@@ -25,7 +29,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset = UIEdgeInsets(top: 51, left: 0, bottom: 0, right: 0) // 51 исходя из высоты SearchBar'a
+        tableView.contentInset = UIEdgeInsets(top: 91, left: 0, bottom: 0, right: 0) // 95 исходя из высоты SearchBar'a 56 + 44 Segment Control
         
         
         var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)   //  Регистрируем .nib файлы
@@ -37,6 +41,13 @@ class SearchViewController: UIViewController {
         cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
     }
+
+//MARK: - Actions
+    
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        performSearch()
+    }
+    
 }
 
 
@@ -44,7 +55,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UISearchBarDelegate {
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    func performSearch() {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
             
@@ -55,7 +66,7 @@ extension SearchViewController: UISearchBarDelegate {
             hasSearched = true
             searchResults = []
             
-            let url = iTunesURL(searchText: searchBar.text!)
+            let url = iTunesURL(searchText: searchBar.text!, category: segmentedControl.selectedSegmentIndex)
             let session = URLSession.shared     //  Default configuration
             dataTask = session.dataTask(with: url) {data, response,
                 error in
@@ -83,6 +94,10 @@ extension SearchViewController: UISearchBarDelegate {
             }
             dataTask?.resume()   //  Sends the request to the server on a background thread
         }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+      performSearch()
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {    //   Прижимаем SearchBar к StatusBar Area
@@ -163,12 +178,20 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Helper Methods
     
-    func iTunesURL(searchText: String) -> URL {
+    func iTunesURL(searchText: String, category: Int) -> URL {
+        
+        let kind: String
+        switch category {
+        case 1: kind = "musicTrack"
+        case 2: kind = "software"
+        case 3: kind = "ebook"
+        default: kind = ""
+        }
+        
+        
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!    //  Декодируем наш запрос с String в валидный URL для поиска в UTF-8
         
-        let urlString = String(
-            format: "https://itunes.apple.com/search?term=%@",
-            encodedText)
+        let urlString = "https://itunes.apple.com/search?" + "term=\(encodedText)&limit=200&entity=\(kind)"
         
         let url = URL(string: urlString)
         return url!
@@ -176,7 +199,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
 
     
-    func parse(data: Data) -> [SearchResult] {      //  use a JSONDecoder object to convert the response data from the server to a temporary ResultArray object
+    func parse(data: Data) -> [SearchResult] {      //  Use a JSONDecoder object to convert the response data from the server to a temporary ResultArray object
         do {
             let decoder = JSONDecoder()
             let result = try decoder.decode(
