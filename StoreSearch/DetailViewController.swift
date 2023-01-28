@@ -14,12 +14,14 @@ class DetailViewController: UIViewController {
     
     var searchResult: SearchResult!
     
+    var downloadTask: URLSessionDownloadTask?   //  Важно для cancel downloadTask!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         popupView.layer.cornerRadius = 10
         
-        let gestureRecognizer = UITapGestureRecognizer(     //  Слушаем вьюху, если что close() кидаем
+        let gestureRecognizer = UITapGestureRecognizer(     //  Слушаем вьюху, если что - close() кидаем
             target: self,
             action: #selector(close))
         gestureRecognizer.cancelsTouchesInView = false
@@ -29,10 +31,19 @@ class DetailViewController: UIViewController {
         if let _ = searchResult {updateUI()}    //  Проверка!
     }
     
+    deinit {
+      print("deinit \(self)")
+      downloadTask?.cancel()    //  Отменяем загрузку, если закрыли поп-ап вьюху до финиша загрузки
+    }
+    
     // MARK: - Helper Methods
     
     func updateUI() {
         nameLabel.text = searchResult.name
+        
+        if let largeURL = URL(string: searchResult.imageLarge) {        //  Получаем изображение
+          downloadTask = artworkImageView.loadImage(url: largeURL)
+        }
         
         if searchResult.artist.isEmpty {
             artistNameLabel.text = "Неизвестно"
@@ -42,7 +53,7 @@ class DetailViewController: UIViewController {
         kindLabel.text = searchResult.type
         genreLabel.text = searchResult.genre
         
-        let formatter = NumberFormatter()       //  Фиксируем цену $$$
+        let formatter = NumberFormatter()       //  Фиксируем цену $$$ создаём formatter
         formatter.numberStyle = .currency
         formatter.currencyCode = searchResult.currency
         
