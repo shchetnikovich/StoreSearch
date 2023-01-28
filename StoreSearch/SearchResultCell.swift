@@ -1,10 +1,3 @@
-//
-//  SearchResultCell.swift
-//  StoreSearch
-//
-//  Created by Anton Shchetnikovich on 25.01.2023.
-//
-
 import UIKit
 
 class SearchResultCell: UITableViewCell {
@@ -17,6 +10,7 @@ class SearchResultCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         let selectedView = UIView(frame: CGRect.zero)
         selectedView.backgroundColor = UIColor(named: "SearchBar")?.withAlphaComponent(0.5)
         selectedBackgroundView = selectedView
@@ -26,8 +20,9 @@ class SearchResultCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    override func prepareForReuse() {   //  Незагруженные, "проскроленные" изображения - отменяем ожидающую загрузку.
+    override func prepareForReuse() {   //  Незагруженные, "проскроленные" изображения - отменяем ожидающую загрузку
         super.prepareForReuse()
+        
         downloadTask?.cancel()
         downloadTask = nil
     }
@@ -36,12 +31,15 @@ class SearchResultCell: UITableViewCell {
     
     func configure(for result: SearchResult) {
         nameLabel.text = result.name
+        
         if result.artist.isEmpty {
             artistNameLabel.text = "Неизвестно"
         } else {
             artistNameLabel.text = String(format: "%@ (%@)", result.artist, result.type)
         }
-        artworkImageView.image = UIImage(systemName: "square")
+        
+        artworkImageView.image = UIImage(systemName: "square")      //  Если что ставим square
+        
         if let smallURL = URL(string: result.imageSmall) {
           downloadTask = artworkImageView.loadImage(url: smallURL)
         }

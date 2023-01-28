@@ -13,7 +13,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var priceButton: UIButton!
     
     var searchResult: SearchResult!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,9 +26,7 @@ class DetailViewController: UIViewController {
         gestureRecognizer.delegate = self
         view.addGestureRecognizer(gestureRecognizer)
         
-        if let _ = searchResult {        //  Проверка!
-        updateUI() }
-
+        if let _ = searchResult {updateUI()}    //  Проверка!
     }
     
     // MARK: - Helper Methods
@@ -41,7 +39,6 @@ class DetailViewController: UIViewController {
         } else {
             artistNameLabel.text = searchResult.artist
         }
-        
         kindLabel.text = searchResult.type
         genreLabel.text = searchResult.genre
         
@@ -61,12 +58,17 @@ class DetailViewController: UIViewController {
         priceButton.setTitle(priceText, for: .normal)
     }
     
-// MARK: - Actions
+    // MARK: - Actions
     
     @IBAction func close() {
-      dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
-
+    
+    @IBAction func openInStore() {      //  Газуем в iTunes по storeURL
+        if let url = URL(string: searchResult.storeURL) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
 }
 
 

@@ -165,6 +165,9 @@
                                                         <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                         <state key="normal" title="$9.99" backgroundImage="PriceButton"/>
+                                                        <connections>
+                                                            <action selector="openInStore" destination="gsg-EI-nEh" eventType="touchUpInside" id="BP0-Y1-4Dl"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
