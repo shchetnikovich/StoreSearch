@@ -248,10 +248,18 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         landscapeVC = storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as? LandscapeViewController //   Вручную прописываем landscapeVC (сиги неу)
         if let controller = landscapeVC {   //  Анврапаем
             controller.view.frame = view.bounds //  Описываем размер альбомной вьюхи от родительской супервью
-            // 4
+            
+            controller.view.alpha = 0
+
             view.addSubview(controller.view)    //  Помещаем новую вьюху поверх старой SearchView
             addChild(controller)    //  Обязательно сообщаем о "Детях"
-            controller.didMove(toParent: self)
+            
+            coordinator.animate(alongsideTransition: { _ in     //  Кроссфейд анимация перехода между портрет/альбом
+                controller.view.alpha = 1   //  Меняем альфу на 1 (100% opacity)
+            }, completion: { _ in
+                controller.didMove(toParent: self)
+            }
+            )
         }
     }
     
