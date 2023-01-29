@@ -29,6 +29,11 @@ class DetailViewController: UIViewController {
         view.addGestureRecognizer(gestureRecognizer)
         
         if let _ = searchResult {updateUI()}    //  Проверка!
+        
+        view.backgroundColor = UIColor.clear    //  Градиент
+        let dimmingView = GradientView(frame: CGRect.zero)
+        dimmingView.frame = view.bounds
+        view.insertSubview(dimmingView, at: 0)
     }
     
     deinit {
