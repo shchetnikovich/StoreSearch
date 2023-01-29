@@ -13,6 +13,8 @@ class SearchViewController: UIViewController {
     
     var dataTask: URLSessionDataTask?       //  Для cancel()
     
+    var landscapeVC: LandscapeViewController?
+    
     
     struct TableView {
         struct CellIdentifiers {
@@ -30,11 +32,28 @@ class SearchViewController: UIViewController {
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.searchResultCell)
         cellNib = UINib(nibName: TableView.CellIdentifiers.nothingFoundCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.nothingFoundCell)
+        
         searchBar.becomeFirstResponder()    //  Show keyboard on app launch
         
         cellNib = UINib(nibName: TableView.CellIdentifiers.loadingCell, bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.loadingCell)
     }
+    
+    override func willTransition(   //  Меняем вьюху portrait/landscape (reg
+        to newCollection: UITraitCollection,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ){
+        super.willTransition(to: newCollection, with: coordinator)
+        switch newCollection.verticalSizeClass {    //  Триггеримся от trait collection verticalSizeClass, свичим вьюху
+        case .compact:
+            showLandscape(with: coordinator)
+        case .regular, .unspecified:    //  .unspecified доп защита в данной ситуации
+            hideLandscape(with: coordinator)
+        @unknown default:
+            break
+        }
+    }
+    
     
 // MARK: - Navigation
     
@@ -222,5 +241,26 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+    
+    func showLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
+        guard landscapeVC == nil else { return }    //  Защита от дублирования вьюхи
+        landscapeVC = storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as? LandscapeViewController //   Вручную прописываем landscapeVC (сиги неу)
+        if let controller = landscapeVC {   //  Анврапаем
+            controller.view.frame = view.bounds //  Описываем размер альбомной вьюхи от родительской супервью
+            // 4
+            view.addSubview(controller.view)    //  Помещаем новую вьюху поверх старой SearchView
+            addChild(controller)    //  Обязательно сообщаем о "Детях"
+            controller.didMove(toParent: self)
+        }
+    }
+    
+    func hideLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
+        if let controller = landscapeVC {
+            controller.willMove(toParent: nil)
+            controller.view.removeFromSuperview()
+            controller.removeFromParent()
+            landscapeVC = nil
+        }
     }
 }
