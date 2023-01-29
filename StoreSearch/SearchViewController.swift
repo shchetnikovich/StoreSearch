@@ -46,7 +46,7 @@ class SearchViewController: UIViewController {
             let indexPath = sender as! IndexPath
             let searchResult = searchResults[indexPath.row]
             detailViewController.searchResult = searchResult
-            segue.destination.modalPresentationStyle = .pageSheet   //  Подключаем modal presentation style (.pageSheet можно свайпать)
+            segue.destination.modalPresentationStyle = .overFullScreen   //  Подключаем modal presentation style (.pageSheet можно свайпать)
         }
     }
     

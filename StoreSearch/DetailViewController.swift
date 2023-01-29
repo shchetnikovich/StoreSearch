@@ -36,6 +36,11 @@ class DetailViewController: UIViewController {
         view.insertSubview(dimmingView, at: 0)
     }
     
+    required init?(coder aDecoder: NSCoder) {   //  Делегат для перехода, когда требуется контроллер анимации
+        super.init(coder: aDecoder)
+        transitioningDelegate = self
+    }
+    
     deinit {
       print("deinit \(self)")
       downloadTask?.cancel()    //  Отменяем загрузку, если закрыли поп-ап вьюху до финиша загрузки
@@ -88,7 +93,7 @@ class DetailViewController: UIViewController {
 }
 
 
-//MARK: - UIGestureRecognizerDelegate
+//MARK: - UIGestureRecognizerDelegate Extension
 
 extension DetailViewController: UIGestureRecognizerDelegate {       //  Фиксируем тап вне pop-up вьюхи
     
@@ -98,4 +103,24 @@ extension DetailViewController: UIGestureRecognizerDelegate {       //  Фикс
     ) -> Bool {
         return (touch.view === self.view)
     }
+}
+
+//MARK: - Animation Extension
+
+extension DetailViewController: UIViewControllerTransitioningDelegate {     //  Делаем кастомную анимацию
+    
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        return BounceAnimationController()  //  show pop-up
+    }
+    
+    func animationController(
+      forDismissed dismissed: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+      return SlideOutAnimationController()  //  close pop-up
+    }
+    
 }

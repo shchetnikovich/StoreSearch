@@ -2,7 +2,7 @@ import UIKit
 
 class BounceAnimationController: NSObject, UIViewControllerAnimatedTransitioning {  //  Управляет анимацией перехода между вьюхами, keyframe анимация
     
-    func transitionDuration(    //  Продолжительность анимации
+    func transitionDuration(    //  Продолжительность анимации 0,4 секунды
         using transitionContext:
         UIViewControllerContextTransitioning?
     ) -> TimeInterval {
@@ -30,7 +30,7 @@ class BounceAnimationController: NSObject, UIViewControllerAnimatedTransitioning
                 animations: {
                     UIView.addKeyframe(
                         withRelativeStartTime: 0.0,
-                        relativeDuration: 0.334) {  //  Не секунлы, а доли от общего времени анимации в transitionDuration!
+                        relativeDuration: 0.334) {  //  0,334 != секунды, а доли от общего времени анимации в transitionDuration! в
                             toView.transform = CGAffineTransform(   //  CGAffineTransform для масштабирования
                                 scaleX: 1.2, y: 1.2)    //  (2) кадр 120%
                         }
@@ -48,7 +48,8 @@ class BounceAnimationController: NSObject, UIViewControllerAnimatedTransitioning
                         }
                 }, completion: { finished in
                     transitionContext.completeTransition(finished)
-                })
+                }
+            )
         }
     }
 }

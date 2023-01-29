@@ -11,6 +11,7 @@
 		A908BD532985620F002E824E /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A908BD522985620F002E824E /* UIImageView+DownloadImage.swift */; };
 		A9588795298677C90075EF83 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9588794298677C90075EF83 /* GradientView.swift */; };
 		A958879729867E130075EF83 /* BounceAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A958879629867E130075EF83 /* BounceAnimationController.swift */; };
+		A95887992986848F0075EF83 /* SlideOutAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95887982986848F0075EF83 /* SlideOutAnimationController.swift */; };
 		A960E021298058B500F8962B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A960E020298058B500F8962B /* AppDelegate.swift */; };
 		A960E023298058B500F8962B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A960E022298058B500F8962B /* SceneDelegate.swift */; };
 		A960E025298058B500F8962B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A960E024298058B500F8962B /* SearchViewController.swift */; };
@@ -28,6 +29,7 @@
 		A908BD522985620F002E824E /* UIImageView+DownloadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+DownloadImage.swift"; sourceTree = "<group>"; };
 		A9588794298677C90075EF83 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		A958879629867E130075EF83 /* BounceAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BounceAnimationController.swift; sourceTree = "<group>"; };
+		A95887982986848F0075EF83 /* SlideOutAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideOutAnimationController.swift; sourceTree = "<group>"; };
 		A960E01D298058B500F8962B /* StoreSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoreSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A960E020298058B500F8962B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A960E022298058B500F8962B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				A9AE56832981A83A00C6C6F7 /* NothingFoundCell.xib */,
 				A9AE567D298189A000C6C6F7 /* SearchResultCell.xib */,
 				A960E026298058B500F8962B /* Main.storyboard */,
+				A95887982986848F0075EF83 /* SlideOutAnimationController.swift */,
 			);
 			path = StoreSearch;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				A9AE5682298190E200C6C6F7 /* SearchResultCell.swift in Sources */,
 				A9588795298677C90075EF83 /* GradientView.swift in Sources */,
 				A96CAF852985706900484FC4 /* DetailViewController.swift in Sources */,
+				A95887992986848F0075EF83 /* SlideOutAnimationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
