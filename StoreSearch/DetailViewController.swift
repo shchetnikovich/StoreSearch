@@ -4,6 +4,11 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    enum AnimationStyle {       //  Стили анимации закрытия вьюхи
+        case slide  //  Убегает навверх
+        case fade   //  Затухает
+    }
+    
     @IBOutlet weak var popupView: UIView!
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -16,12 +21,14 @@ class DetailViewController: UIViewController {
     
     var downloadTask: URLSessionDownloadTask?   //  Важно для cancel downloadTask!
     
+    var dismissStyle = AnimationStyle.fade  //  По умолчанию стиль
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         popupView.layer.cornerRadius = 10
         
-        let gestureRecognizer = UITapGestureRecognizer(     //  Слушаем вьюху, если что - close() кидаем
+        let gestureRecognizer = UITapGestureRecognizer(     //  Слушаем вьюху, если тап мимо - close() кидаем
             target: self,
             action: #selector(close))
         gestureRecognizer.cancelsTouchesInView = false
@@ -30,7 +37,7 @@ class DetailViewController: UIViewController {
         
         if let _ = searchResult {updateUI()}    //  Проверка!
         
-        view.backgroundColor = UIColor.clear    //  Градиент
+        view.backgroundColor = UIColor.clear    //  Пошёл градиент
         let dimmingView = GradientView(frame: CGRect.zero)
         dimmingView.frame = view.bounds
         view.insertSubview(dimmingView, at: 0)
@@ -43,7 +50,7 @@ class DetailViewController: UIViewController {
     
     deinit {
       print("deinit \(self)")
-      downloadTask?.cancel()    //  Отменяем загрузку, если закрыли поп-ап вьюху до финиша загрузки
+      downloadTask?.cancel()    //  Отменяем загрузку данных, если закрыли поп-ап вьюху до финиша загрузки
     }
     
     // MARK: - Helper Methods
@@ -82,6 +89,7 @@ class DetailViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func close() {
+        dismissStyle = .slide   //  При тапе на крестик внутри поп-апа
         dismiss(animated: true, completion: nil)
     }
     
@@ -120,7 +128,12 @@ extension DetailViewController: UIViewControllerTransitioningDelegate {     //  
     func animationController(
       forDismissed dismissed: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-      return SlideOutAnimationController()  //  close pop-up
+        switch dismissStyle {   //  Тут свичер на анимацию закрытия поп-апа (в завис. от альбом/портрет)
+          case .slide:
+            return SlideOutAnimationController()
+          case .fade:
+            return FadeOutAnimationController()
+          }
     }
     
 }
