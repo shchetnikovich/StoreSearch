@@ -21,7 +21,7 @@ class DetailViewController: UIViewController {
     
     var downloadTask: URLSessionDownloadTask?   //  Важно для cancel downloadTask!
     
-    var dismissStyle = AnimationStyle.fade  //  По умолчанию стиль
+    var dismissStyle = AnimationStyle.fade  //  По умолчанию стиль скрытия
     
     override func viewDidLoad() {
         super.viewDidLoad()
