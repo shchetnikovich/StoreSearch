@@ -266,9 +266,15 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func hideLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
         if let controller = landscapeVC {
             controller.willMove(toParent: nil)
-            controller.view.removeFromSuperview()
-            controller.removeFromParent()
-            landscapeVC = nil
+            coordinator.animate(        //  Анимация fade out, также удаляем вьюху и контроллер
+                alongsideTransition: { _ in
+                    controller.view.alpha = 0
+                }, completion: { _ in
+                    controller.view.removeFromSuperview()
+                    controller.removeFromParent()
+                    self.landscapeVC = nil
+                }
+            )
         }
     }
 }
