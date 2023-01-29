@@ -24,8 +24,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset = UIEdgeInsets(top: 91, left: 0, bottom: 0, right: 0) // 95 исходя из высоты SearchBar'a 56 + 44 Segment Control
-        
+        tableView.contentInset = UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0) // 100 исходя из высоты SearchBar'a 56 + 44 Segment Control
         
         var cellNib = UINib(nibName: TableView.CellIdentifiers.searchResultCell, bundle: nil)   //  Регистрируем .nib файлы
         tableView.register(cellNib, forCellReuseIdentifier: TableView.CellIdentifiers.searchResultCell)
