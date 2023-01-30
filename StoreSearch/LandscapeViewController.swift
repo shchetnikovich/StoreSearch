@@ -20,6 +20,8 @@ class LandscapeViewController: UIViewController {
         
         scrollView.removeConstraints(scrollView.constraints)    // Remove constraints for scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = true
+        
+        pageControl.numberOfPages = 0
     }
     
     override func viewWillLayoutSubviews() {        //  Впервые появляемся на экране, вручную описываем новый layout LandscapeView
@@ -42,7 +44,7 @@ class LandscapeViewController: UIViewController {
     
     private func tileButtons(_ searchResults: [SearchResult]) {     //  Вручную указывам размер будущих Grid Tile'ов
         
-        let itemWidth: CGFloat = 94     //  Выйдет grid 3 row, 6 column
+        let itemWidth: CGFloat = 94     //  Выйдет grid 4 row, 7 column (iPhone SE)
         let itemHeight: CGFloat = 88
         var columnsPerPage = 0
         var rowsPerPage = 0
@@ -96,5 +98,25 @@ class LandscapeViewController: UIViewController {
             width: CGFloat(numPages) * viewWidth,
             height: scrollView.bounds.size.height)
         print("Number of pages: \(numPages)")
+        
+        pageControl.numberOfPages = numPages
+        pageControl.currentPage = 0
+    }
+    
+    // MARK: - Actions
+    
+    @IBAction func pageChanged(_ sender: UIPageControl) {
+        scrollView.contentOffset = CGPoint(
+            x: scrollView.bounds.size.width *
+            CGFloat(sender.currentPage),
+            y: 0)
+    }
+}
+
+extension LandscapeViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let width = scrollView.bounds.size.width
+        let page = Int((scrollView.contentOffset.x + width / 2) / width)
+        pageControl.currentPage = page
     }
 }
