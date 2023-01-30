@@ -7,7 +7,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     private let search = Search()
-
+    
     var landscapeVC: LandscapeViewController?
     
     
@@ -50,7 +50,7 @@ class SearchViewController: UIViewController {
     }
     
     
-// MARK: - Navigation
+    // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender:
                           Any?) {
@@ -64,8 +64,8 @@ class SearchViewController: UIViewController {
     }
     
     
-
-//MARK: - Actions
+    
+    //MARK: - Actions
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         performSearch()
@@ -77,20 +77,22 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func performSearch() {
-        search.performSearch(
-            for: searchBar.text!,
-            category: segmentedControl.selectedSegmentIndex
-        ){
-            success in
-            if !success { self.showNetworkError() }
-            self.tableView.reloadData()
+        if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+            search.performSearch(
+                for: searchBar.text!,
+                category: category
+            ){
+                success in
+                if !success  { self.showNetworkError() }
+                self.tableView.reloadData()
+            }
+            tableView.reloadData()
+            searchBar.resignFirstResponder()
         }
-        tableView.reloadData()
-        searchBar.resignFirstResponder()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-      performSearch()
+        performSearch()
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {    //   Прижимаем SearchBar к StatusBar Area
@@ -163,8 +165,6 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - Helper Methods
-    
-
     
     func showNetworkError() {       //  Error handling
         let alert = UIAlertController(
