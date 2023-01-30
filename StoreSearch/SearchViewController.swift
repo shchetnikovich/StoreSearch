@@ -6,13 +6,8 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    var searchResults = [SearchResult]()
-    var hasSearched = false         //  Handle no results when app starts
-    
-    var isLoading = false
-    
-    var dataTask: URLSessionDataTask?       //  Для cancel()
-    
+    private let search = Search()
+
     var landscapeVC: LandscapeViewController?
     
     
@@ -62,7 +57,7 @@ class SearchViewController: UIViewController {
         if segue.identifier == "ShowDetail" {
             let detailViewController = segue.destination as! DetailViewController       //  Передаем объект в DetailViewController по IndexPath
             let indexPath = sender as! IndexPath
-            let searchResult = searchResults[indexPath.row]
+            let searchResult = search.searchResults[indexPath.row]
             detailViewController.searchResult = searchResult
             segue.destination.modalPresentationStyle = .overFullScreen   //  Подключаем modal presentation style (.pageSheet можно свайпать)
         }
@@ -82,44 +77,11 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func performSearch() {
-        if !searchBar.text!.isEmpty {
-            searchBar.resignFirstResponder()
-            
-            dataTask?.cancel()      //  Making sure that no old searches can ever get in the way of the new search
-            isLoading = true
-            tableView.reloadData()
-            
-            hasSearched = true
-            searchResults = []
-            
-            let url = iTunesURL(searchText: searchBar.text!, category: segmentedControl.selectedSegmentIndex)
-            let session = URLSession.shared     //  Default configuration
-            dataTask = session.dataTask(with: url) {data, response,
-                error in
-                if let error = error {
-                    print("Failure! \(error.localizedDescription)")
-                } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                    if let data = data {
-                        self.searchResults = self.parse(data: data)
-                        self.searchResults.sort(by: <)
-                        DispatchQueue.main.async {
-                            self.isLoading = false
-                            self.tableView.reloadData()
-                        }
-                        return
-                    }
-                } else {
-                    print("Failure! \(response!)")
-                }
-                DispatchQueue.main.async {      //  UI перерисовку делать только в MAIN THREAD
-                    self.hasSearched = false
-                    self.isLoading = false
-                    self.tableView.reloadData()
-                    self.showNetworkError()
-                }
-            }
-            dataTask?.resume()   //  Sends the request to the server on a background thread
-        }
+        search.performSearch(
+            for: searchBar.text!,
+            category: segmentedControl.selectedSegmentIndex)
+        tableView.reloadData()
+        searchBar.resignFirstResponder()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -139,14 +101,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        if isLoading {
+        if search.isLoading {
             return 1
-        } else if !hasSearched {
+        } else if !search.hasSearched {
             return 0
-        } else if searchResults.count == 0 {
+        } else if search.searchResults.count == 0 {
             return 1
         } else {
-            return searchResults.count
+            return search.searchResults.count
         }
     }
     
@@ -155,12 +117,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         
-        if isLoading {
+        if search.isLoading {
             let cell = tableView.dequeueReusableCell(withIdentifier: TableView.CellIdentifiers.loadingCell, for: indexPath)
             let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
             spinner.startAnimating()
             return cell
-        } else if searchResults.count == 0 {
+        } else if search.searchResults.count == 0 {
             return tableView.dequeueReusableCell(
                 withIdentifier: TableView.CellIdentifiers.nothingFoundCell,
                 for: indexPath)
@@ -168,7 +130,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: TableView.CellIdentifiers.searchResultCell,
                 for: indexPath) as! SearchResultCell
-            let searchResult = searchResults[indexPath.row]
+            let searchResult = search.searchResults[indexPath.row]
             cell.configure(for: searchResult)
             return cell
         }
@@ -188,7 +150,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         _ tableView: UITableView,
         willSelectRowAt indexPath: IndexPath
     ) -> IndexPath? {
-        if searchResults.count == 0 || isLoading {
+        if search.searchResults.count == 0 || search.isLoading {
             return nil
         } else {
             return indexPath
@@ -197,38 +159,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Helper Methods
     
-    func iTunesURL(searchText: String, category: Int) -> URL {
-        
-        let kind: String
-        switch category {
-        case 1: kind = "musicTrack"
-        case 2: kind = "software"
-        case 3: kind = "ebook"
-        default: kind = ""
-        }
-        
-        
-        let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!    //  Декодируем наш запрос с String в валидный URL для поиска в UTF-8
-        
-        let urlString = "https://itunes.apple.com/search?" + "term=\(encodedText)&limit=200&entity=\(kind)"
-        
-        let url = URL(string: urlString)
-        return url!
-    }
-    
 
-    
-    func parse(data: Data) -> [SearchResult] {      //  Use a JSONDecoder object to convert the response data from the server to a temporary ResultArray object
-        do {
-            let decoder = JSONDecoder()
-            let result = try decoder.decode(
-                ResultArray.self, from: data)
-            return result.results
-        } catch {
-            print("JSON Error: \(error)")
-            return []
-        }
-    }
     
     func showNetworkError() {       //  Error handling
         let alert = UIAlertController(
@@ -247,7 +178,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         guard landscapeVC == nil else { return }    //  Защита от дублирования вьюхи
         landscapeVC = storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as? LandscapeViewController //   Вручную прописываем landscapeVC (сиги неу)
         if let controller = landscapeVC {   //  Анврапаем
-            controller.searchResults = searchResults
+            controller.search = search
             controller.view.frame = view.bounds //  Описываем размер альбомной вьюхи от родительской супервью
             controller.view.alpha = 0
             view.addSubview(controller.view)    //  Помещаем новую вьюху поверх старой SearchView

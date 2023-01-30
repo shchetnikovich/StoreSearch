@@ -5,7 +5,7 @@ class LandscapeViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    var searchResults = [SearchResult]()
+    var search: Search!
     
     private var firstTime = true
     
@@ -38,7 +38,7 @@ class LandscapeViewController: UIViewController {
         
         if firstTime {
             firstTime = false
-            tileButtons(searchResults)
+            tileButtons(search.searchResults)
         }
     }
     
@@ -51,7 +51,7 @@ class LandscapeViewController: UIViewController {
     
     // MARK: - Private Methods
     
-    private func tileButtons(_ searchResults: [SearchResult]) {     //  Вручную указывам размер будущих Grid Tile'ов
+    private func tileButtons(_ searchResults: [SearchResult]) {     //  Указывам размер будущих Grid Tile'ов
         
         let itemWidth: CGFloat = 94     //  Выйдет grid 4 row, 7 column (iPhone SE)
         let itemHeight: CGFloat = 88
@@ -78,7 +78,7 @@ class LandscapeViewController: UIViewController {
         var row = 0
         var column = 0
         var x = marginX
-        for (index, result) in searchResults.enumerated() {
+        for (_, result) in searchResults.enumerated() {
             
             let button = UIButton(type: .custom)
             button.setBackgroundImage(UIImage(named: "LandscapeButton"), for: .normal)
@@ -123,7 +123,7 @@ class LandscapeViewController: UIViewController {
                 [weak button] url, _, error in
                 if error == nil, let url = url,
                    let data = try? Data(contentsOf: url),
-                   let image = UIImage(data: data) {
+                   let image = UIImage(data: data) {        //!!!
                     DispatchQueue.main.async {
                         if let button = button {
                             button.setImage(image, for: .normal)
