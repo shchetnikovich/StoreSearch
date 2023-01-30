@@ -2,18 +2,54 @@ import Foundation
 
 class Search {
     
+    typealias SearchComplete = (Bool) -> Void   //  Кастомное замыкание, принамет Bool, ничего не возвращает
+    
     var searchResults: [SearchResult] = []
     var hasSearched = false
     var isLoading = false
     
     private var dataTask: URLSessionDataTask?
     
-    func performSearch(for text: String, category: Int) {
-        print("Поиск...")
+    func performSearch(
+        for text: String,
+        category: Int,
+        completion: @escaping SearchComplete
+    ) {
+        if !text.isEmpty {
+            dataTask?.cancel()
+            isLoading = true
+            hasSearched = true
+            searchResults = []
+            let url = iTunesURL(searchText: text, category: category)
+            let session = URLSession.shared
+            dataTask = session.dataTask(with: url) {
+                data, response, error in
+                var success = false
+                if let error = error as NSError?, error.code == -999 {
+                    return
+                }
+                if let httpResponse = response as? HTTPURLResponse,
+                   httpResponse.statusCode == 200, let data = data {
+                    self.searchResults = self.parse(data: data)
+                    self.searchResults.sort(by: <)
+                    print("Success!")
+                    self.isLoading = false
+                    success = true
+                }
+                
+                if !success {
+                    self.hasSearched = false
+                    self.isLoading = false
+                }
+                DispatchQueue.main.async {
+                    completion(success)
+                }
+            }
+            dataTask?.resume()
+        }
     }
     
     private func iTunesURL(searchText: String, category: Int) -> URL {
-        
         let kind: String
         switch category {
         case 1: kind = "musicTrack"
@@ -21,7 +57,6 @@ class Search {
         case 3: kind = "ebook"
         default: kind = ""
         }
-        
         
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!    //  Декодируем наш запрос с String в валидный URL для поиска в UTF-8
         
