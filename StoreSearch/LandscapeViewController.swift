@@ -40,6 +40,7 @@ class LandscapeViewController: UIViewController {
             firstTime = false
             switch search.state {
             case .notSearchedYet, .loading, .noResults:
+                showSpinner()
                 break
             case .results(let list):
                 tileButtons(list)
@@ -51,6 +52,18 @@ class LandscapeViewController: UIViewController {
         print("deinit \(self)")
         for task in downloads {
             task.cancel()
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    func searchResultsReceived() {
+        hideSpinner()
+        switch search.state {
+        case .notSearchedYet, .loading, .noResults:
+            break
+        case .results(let list):
+            tileButtons(list)
         }
     }
     
@@ -141,6 +154,20 @@ class LandscapeViewController: UIViewController {
         }
     }
     
+    private func showSpinner() {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.center = CGPoint(       //  Центр экрана
+            x: scrollView.bounds.midX + 0.5,
+            y: scrollView.bounds.midY + 0.5) // При добавлении в центр, спинер будет размыт т.к. нечетная ширина сабжа 37 поинтс
+        spinner.tag = 1000
+        view.addSubview(spinner)
+        spinner.startAnimating()
+    }
+    
+    private func hideSpinner() {
+        view.viewWithTag(1000)?.removeFromSuperview()
+    }
+    
     // MARK: - Actions
     
     @IBAction func pageChanged(_ sender: UIPageControl) {
@@ -157,6 +184,8 @@ class LandscapeViewController: UIViewController {
         )
     }
 }
+
+//MARK: - Extension
 
 extension LandscapeViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
