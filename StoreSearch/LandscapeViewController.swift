@@ -9,6 +9,8 @@ class LandscapeViewController: UIViewController {
     
     private var firstTime = true
     
+    private var downloads = [URLSessionDownloadTask]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,6 +39,13 @@ class LandscapeViewController: UIViewController {
         if firstTime {
             firstTime = false
             tileButtons(searchResults)
+        }
+    }
+    
+    deinit {
+        print("deinit \(self)")
+        for task in downloads {
+            task.cancel()
         }
     }
     
@@ -74,7 +83,7 @@ class LandscapeViewController: UIViewController {
             let button = UIButton(type: .custom)
             button.setBackgroundImage(UIImage(named: "LandscapeButton"), for: .normal)
             downloadImage(for: result, andPlaceOn: button)
-
+            
             button.frame = CGRect(  //  Обязательно необходимо установить .frame
                 x: x + paddingHorz,
                 y: marginY + CGFloat(row) * itemHeight + paddingVert,
@@ -82,7 +91,7 @@ class LandscapeViewController: UIViewController {
                 height: buttonHeight)
             
             scrollView.addSubview(button)
-
+            
             row += 1
             if row == rowsPerPage {
                 row = 0; x += itemWidth; column += 1
@@ -123,6 +132,7 @@ class LandscapeViewController: UIViewController {
                 }
             }
             task.resume()
+            downloads.append(task)
         }
     }
     
