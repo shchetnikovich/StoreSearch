@@ -106,10 +106,17 @@ class LandscapeViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func pageChanged(_ sender: UIPageControl) {
-        scrollView.contentOffset = CGPoint(
-            x: scrollView.bounds.size.width *
-            CGFloat(sender.currentPage),
-            y: 0)
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            options: [.curveEaseOut],
+            animations: {
+                self.scrollView.contentOffset = CGPoint(
+                    x: self.scrollView.bounds.size.width *
+                    CGFloat(sender.currentPage),
+                    y: 0)
+            }
+        )
     }
 }
 
