@@ -212,6 +212,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             coordinator.animate(        //  Анимация fade out, также удаляем вьюху и контроллер
                 alongsideTransition: { _ in
                     controller.view.alpha = 0
+                    if self.presentedViewController != nil {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }, completion: { _ in
                     controller.view.removeFromSuperview()
                     controller.removeFromParent()
