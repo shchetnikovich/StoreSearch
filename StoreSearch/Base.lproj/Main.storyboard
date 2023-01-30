@@ -234,6 +234,8 @@
                             <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="KMy-kJ-pkE">
                                 <rect key="frame" x="275" y="329" width="117" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="pageIndicatorTintColor" name="SearchBar"/>
+                                <color key="currentPageIndicatorTintColor" name="ArtistName"/>
                                 <connections>
                                     <action selector="pageChanged:" destination="Eqb-Kd-3rb" eventType="valueChanged" id="wFE-UB-gBl"/>
                                 </connections>
