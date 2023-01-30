@@ -247,6 +247,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         guard landscapeVC == nil else { return }    //  Защита от дублирования вьюхи
         landscapeVC = storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as? LandscapeViewController //   Вручную прописываем landscapeVC (сиги неу)
         if let controller = landscapeVC {   //  Анврапаем
+            controller.searchResults = searchResults
             controller.view.frame = view.bounds //  Описываем размер альбомной вьюхи от родительской супервью
             controller.view.alpha = 0
             view.addSubview(controller.view)    //  Помещаем новую вьюху поверх старой SearchView

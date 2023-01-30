@@ -5,6 +5,8 @@ class LandscapeViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
     
+    var searchResults = [SearchResult]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -17,5 +19,19 @@ class LandscapeViewController: UIViewController {
         scrollView.removeConstraints(scrollView.constraints)    // Remove constraints for scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = true
         
+//        scrollView.contentSize = CGSize(width: 1000, height: 1000)
     }
+    
+    override func viewWillLayoutSubviews() {        //  Впервые появляемся на экране, вручную описываем новый layout LandscapeView
+        super.viewWillLayoutSubviews()
+        let safeFrame = view.safeAreaLayoutGuide.layoutFrame
+        scrollView.frame = safeFrame
+        pageControl.frame = CGRect(
+            x: safeFrame.origin.x,
+            y: safeFrame.size.height - pageControl.frame.size.height,
+            width: safeFrame.size.width,
+            height: pageControl.frame.size.height)
+    }
+    
+    
 }
