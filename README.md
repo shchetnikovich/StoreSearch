@@ -4,8 +4,12 @@ StoreSearch App Project
 
 ## Demo
 
-<div align="center">
-    <img src="./readme_img/ss_demo.gif" style="width: 200px"/>
+<div align="left">
+    <img src="./readme_img/ss_demo.gif" style="width: 300px"/>   
 </div>
 
 ## Tools used
+
+ 1. UIKit, Custom Xib, Dynamic Type
+ 2. GCD
+ 3. HTTP, JSON, URLSession
