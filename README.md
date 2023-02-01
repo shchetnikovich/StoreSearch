@@ -5,7 +5,7 @@ StoreSearch App Project
 ## Demo
 
 <div align="center">
-    <img src="./readme_img/ss_demo.gif" style="width: 300px"/>
+    <img src="./readme_img/ss_demo.gif" style="width: 200px"/>
 </div>
 
 ## Tools used
