@@ -1,5 +1,3 @@
-
-
 import UIKit
 
 class DetailViewController: UIViewController {
@@ -135,5 +133,4 @@ extension DetailViewController: UIViewControllerTransitioningDelegate {     //  
             return FadeOutAnimationController()
           }
     }
-    
 }
