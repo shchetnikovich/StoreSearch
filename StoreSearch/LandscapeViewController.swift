@@ -86,7 +86,7 @@ class LandscapeViewController: UIViewController {
     
     private func tileButtons(_ searchResults: [SearchResult]) {     //  Указывам размер будущих Grid Tile'ов
         
-        let itemWidth: CGFloat = 94     //  Выйдет grid 4 row, 7 column (iPhone SE)
+        let itemWidth: CGFloat = 94     //  Выйдет grid 4 row, 8 column (iPhone 14 Pro Max)
         let itemHeight: CGFloat = 88
         var columnsPerPage = 0
         var rowsPerPage = 0
