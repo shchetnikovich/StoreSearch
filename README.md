@@ -11,5 +11,4 @@ StoreSearch App Project
 ## Tools used
 
  1. UIKit, Custom Xib, Dynamic Type
- 2. GCD
- 3. HTTP, JSON, URLSession
+ 2. GCD, HTTP, JSON, URLSession
